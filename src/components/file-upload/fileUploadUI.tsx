@@ -2,7 +2,7 @@ import React from "react";
 import TrashIcon from "../../icons/trash.icon";
 
 type Props = {
-  dropHandler: (event: React.DragEvent) => void;
+  onDropHandler: (event: React.DragEvent) => void;
   dragOverHandler: (event: React.DragEvent) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   hiddenFileInput: React.RefObject<HTMLInputElement>;
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export default function FileUploadUI({
-  dropHandler,
+  onDropHandler,
   dragOverHandler,
   handleInputChange,
   handleUploadButton,
@@ -47,14 +47,18 @@ export default function FileUploadUI({
       <span className="text-small text-gray-500">No files selected</span>
     </li>
   );
+
   if (files.length > 0) {
     fileList = files.map((file, i) => {
+      //TODO CHECK IF FILE IS A CSV
+      //   const objectURL = URL.createObjectURL(file);
       const fileSize = `${Math.round(file?.size / 1000)} kb`;
+
       return (
         <li key={i} className="relative">
           <article className="w-40 h-32 bg-cover rounded-lg bg-gray-100 drop-shadow-lg">
             <img
-              src="https://i.ibb.co/pyqs3hR/csv-chart-flow.png"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASkAAACpCAMAAABAgDvcAAAAWlBMVEXh5urDzdba3+LFz9nf5+rEz9HBy8/S3d/CytHJztHBzNLL19ji6e3R193g5enCzNbGys7O1t7Z4OPa4ejS2t/J0tXV3eXU2dze5u3N0tXa5O69yNHZ4+XF0dKFwnRbAAAC4klEQVR4nO3c63KqMBRAYYLIQY3BCy1yaN//NQ83EQjqHi/TM93r+9GZxtYZ1wRMwDYIAAAAAAAAAAAAAAAAAAAAAAAAADzKRe/ifvqlvVi4fJfwp1/ai4XmXShFKUrdRikpSklRSopSUpSSopTUoFSaPC/VUSp8no5Sixc83YJSQpSSopQUpWa5wAZRVH25oNSVXy52cbwrwksrSs3al93ywvRXgik1w636dWayO3SDlPJZM1hlmqQbpZTHZokZltq2w4pLuWD+FZ8WwylVza9TM6y51CE+zo6no1LGtD+luJRdrhdz9ziP5TiUyZphxaWytTEfkT9+8Eo1iyrFperzdrzxx4/lJJXqOVXtVvbNI0lup49Fy/W4VHuIKi3VH2PpzjtV2c2oVLpQ/t636t/gpqmcG6+nui5aS+WXGitvVmXlYJ3QLTy1lnKDFOU+mJyrbH4+8tKkOA8qLVUMVpdpkgfjaeWCo0nqSZeaz35QZ6mveLxh+fTeAIMwL4p8mERnqY/JOsD42xrv5KWyVG48p7tPp6+UC06JFyrd+8ffhL5Sl0u/Q+vNzA5wRGGpMPVDVamyO0+nsNRqLtRlLe5x7QPqStlsdkrVZq/rBce0XaWrKxUmV0v525pKkZQ6S0Wba52qbc102eXs32pY6Zw6LK+XMmUxXiu4bTP/dJa60alONdrWhKZdTqgslfmLzqHUHPpUUXY+o2ksdbx6Nj9bdgtQ+/XdjyksZYu7peLmbo2z2TLWXCq8few1mm2N2w+TKiwlCFVvayYfTFBYKpveRr+S6jseD+grtZV0qlNNvqeUFKUo1aGUFKWkKCVFKSlKSfmlRAtPj74reXa7fsxW3acXD5vHtH/loKiUs49q7kQoKvUkSklRSopSUipKpeXqeYNPyf7eUq9GKUpR6jZKSVFKilJSlJKilBSlpML4XX5bKffnXX7bf/0GAAAAAAAAAAAAAAAAAAAAAAAA8D/6B0YsNs6SxFarAAAAAElFTkSuQmCC"
               alt={file?.name}
               className="w-full h-full object-cover rounded"
             />
@@ -81,7 +85,7 @@ export default function FileUploadUI({
         <article
           aria-label="File Upload Modal"
           className="relative h-full flex flex-col bg-white shadow-xl rounded-md"
-          onDrop={dropHandler}
+          onDrop={onDropHandler}
           onDragOver={dragOverHandler}
           // ondragleave="dragLeaveHandler(event);"
           // ondragenter="dragEnterHandler(event);"

@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  ChangeEvent,
-  DragEvent,
-  useRef,
-  useState,
-  MouseEvent,
-} from "react";
+import React, { useRef, useState } from "react";
 import FileUploadUI from "./fileUploadUI";
 
 type Props = {};
@@ -15,15 +9,17 @@ export default function FileUpload({}: Props) {
   const [files, setFiles] = useState<File[]>([]);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
-  const dropHandler = (event: DragEvent): void => {
+  const onDropHandler = (event: React.DragEvent): void => {
+    event.preventDefault();
     console.log(event);
   };
-  const dragOverHandler = (event: DragEvent): void => {
-    console.log(event);
+  const dragOverHandler = (event: React.DragEvent): void => {
+    // console.log(event);
   };
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const filesUploaded = event?.target?.files;
+    console.log(filesUploaded);
 
     if (filesUploaded) {
       const newFiles = Array.from(filesUploaded).filter(
@@ -50,7 +46,7 @@ export default function FileUpload({}: Props) {
 
   return (
     <FileUploadUI
-      dropHandler={dropHandler}
+      onDropHandler={onDropHandler}
       dragOverHandler={dragOverHandler}
       handleInputChange={handleInputChange}
       hiddenFileInput={hiddenFileInput}

@@ -1,11 +1,18 @@
 "use client";
 
-import React, { ChangeEvent, DragEvent, useRef } from "react";
+import React, {
+  ChangeEvent,
+  DragEvent,
+  useRef,
+  useState,
+  MouseEvent,
+} from "react";
 import FileUploadUI from "./fileUploadUI";
 
 type Props = {};
 
 export default function FileUpload({}: Props) {
+  const [files, setFiles] = useState<File[]>([]);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   const dropHandler = (event: DragEvent): void => {
@@ -15,30 +22,41 @@ export default function FileUpload({}: Props) {
     console.log(event);
   };
 
-  const inputHandleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("here");
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const filesUploaded = event?.target?.files;
 
-    const fileUploaded = event?.target?.files?.[0];
-    // if (fileUploaded) {
-    //   props.handleFile(fileUploaded);
-    // }
+    if (filesUploaded) {
+      const newFiles = Array.from(filesUploaded).filter(
+        (file) => file !== null
+      );
+      setFiles([...files, ...newFiles]);
+    }
   };
 
-  const handleButtonClick = () => {
+  const handleUploadButton = () => {
     if (hiddenFileInput.current) {
-      console.log(hiddenFileInput);
-
       hiddenFileInput.current.click();
     }
+  };
+
+  const handleDeleteClick = (file: File) => {
+    if (hiddenFileInput.current !== null) {
+      hiddenFileInput.current.value = "";
+    }
+
+    const deleteFile = files.filter((e) => e !== file);
+    setFiles([...deleteFile]);
   };
 
   return (
     <FileUploadUI
       dropHandler={dropHandler}
       dragOverHandler={dragOverHandler}
-      handleChange={inputHandleChange}
+      handleInputChange={handleInputChange}
       hiddenFileInput={hiddenFileInput}
-      handleButtonClick={handleButtonClick}
+      handleUploadButton={handleUploadButton}
+      handleDeleteClick={handleDeleteClick}
+      files={files}
     />
   );
 }

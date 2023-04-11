@@ -11,21 +11,49 @@ export default function FileUpload({}: Props) {
 
   const onDropHandler = (event: React.DragEvent): void => {
     event.preventDefault();
-    console.log(event);
+    const dragFiles = event.dataTransfer.files;
+    //create array based on dragFles object and then filter it's contents to make sure there is non null
+    const dragFileArray = Array.from(dragFiles).filter((file) => file !== null);
+    //check if the file is already loaded
+    let fileRepeated = false;
+    for (const dragFile of dragFileArray) {
+      const findRepeated = files.some((file) => file.name === dragFile.name);
+      if (findRepeated) {
+        fileRepeated = true;
+        alert("Repeated file");
+        break;
+      }
+    }
+    if (!fileRepeated) {
+      setFiles([...files, ...dragFileArray]);
+    }
   };
-  const dragOverHandler = (event: React.DragEvent): void => {
-    // console.log(event);
+  const ondragOverHandler = (event: React.DragEvent): void => {
+    event.preventDefault();
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const filesUploaded = event?.target?.files;
-    console.log(filesUploaded);
-
     if (filesUploaded) {
-      const newFiles = Array.from(filesUploaded).filter(
+      const uploadedFiles = Array.from(filesUploaded).filter(
         (file) => file !== null
       );
-      setFiles([...files, ...newFiles]);
+      //create array based on filesUploaded object and then filter it's contents to make sure there is non null
+      let fileRepeated = false;
+      for (const uploadedFile of uploadedFiles) {
+        const findRepeated = files.some(
+          (file) => file.name === uploadedFile.name
+        );
+        if (findRepeated) {
+          fileRepeated = true;
+          alert("repeated file");
+          break;
+        }
+      }
+      if (!fileRepeated) {
+        setFiles([...files, ...uploadedFiles]);
+        event.target.value = "";
+      }
     }
   };
 
@@ -47,7 +75,7 @@ export default function FileUpload({}: Props) {
   return (
     <FileUploadUI
       onDropHandler={onDropHandler}
-      dragOverHandler={dragOverHandler}
+      ondragOverHandler={ondragOverHandler}
       handleInputChange={handleInputChange}
       hiddenFileInput={hiddenFileInput}
       handleUploadButton={handleUploadButton}

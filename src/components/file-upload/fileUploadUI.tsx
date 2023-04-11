@@ -3,7 +3,7 @@ import TrashIcon from "../../icons/trash.icon";
 
 type Props = {
   onDropHandler: (event: React.DragEvent) => void;
-  dragOverHandler: (event: React.DragEvent) => void;
+  ondragOverHandler: (event: React.DragEvent) => void;
   handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   hiddenFileInput: React.RefObject<HTMLInputElement>;
   handleUploadButton: () => void;
@@ -13,7 +13,7 @@ type Props = {
 
 export default function FileUploadUI({
   onDropHandler,
-  dragOverHandler,
+  ondragOverHandler,
   handleInputChange,
   handleUploadButton,
   hiddenFileInput,
@@ -86,7 +86,7 @@ export default function FileUploadUI({
           aria-label="File Upload Modal"
           className="relative h-full flex flex-col bg-white shadow-xl rounded-md"
           onDrop={onDropHandler}
-          onDragOver={dragOverHandler}
+          onDragOver={ondragOverHandler}
           // ondragleave="dragLeaveHandler(event);"
           // ondragenter="dragEnterHandler(event);"
         >

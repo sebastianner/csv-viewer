@@ -1,6 +1,6 @@
 import React from "react";
 
-const TrashIcon = () => {
+const TrashIcon: React.FC = () => {
   return (
     <svg
       className="pointer-events-none fill-current w-4 h-4 ml-auto"
@@ -8,6 +8,7 @@ const TrashIcon = () => {
       width="20"
       height="20"
       viewBox="0 0 24 24"
+      fill="white"
     >
       <path
         className="pointer-events-none"

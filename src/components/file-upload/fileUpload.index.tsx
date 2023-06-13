@@ -7,6 +7,7 @@ type Props = {};
 
 export default function FileUpload({}: Props) {
   const [files, setFiles] = useState<File[]>([]);
+  const [dragEnter, setDragEnter] = useState<boolean>(false);
   const hiddenFileInput = useRef<HTMLInputElement>(null);
 
   const onDropHandler = (event: React.DragEvent): void => {
@@ -27,9 +28,18 @@ export default function FileUpload({}: Props) {
     if (!fileRepeated) {
       setFiles([...files, ...dragFileArray]);
     }
+    setDragEnter(false);
   };
-  const ondragOverHandler = (event: React.DragEvent): void => {
+  const onDragOverHandler = (event: React.DragEvent): void => {
     event.preventDefault();
+    setDragEnter(true);
+  };
+
+  const onDragLeaveHandler = (event: React.DragEvent) => {
+    //review event.relatedTarget
+    if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+      setDragEnter(false);
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,14 +82,34 @@ export default function FileUpload({}: Props) {
     setFiles([...deleteFile]);
   };
 
+  const handleUploadClick = async () => {
+    if (files.length > 0) {
+      const formData = new FormData();
+      for (const file of files) {
+        formData.append(file?.name, file, file?.name);
+      }
+      const csvToJson = await fetch("/api/submit", {
+        method: "POST",
+        body: formData,
+      });
+
+      console.log(await csvToJson.json());
+    }
+
+    //todo more than one file
+  };
+
   return (
     <FileUploadUI
       onDropHandler={onDropHandler}
-      ondragOverHandler={ondragOverHandler}
+      onDragOverHandler={onDragOverHandler}
+      onDragLeaveHandler={onDragLeaveHandler}
       handleInputChange={handleInputChange}
-      hiddenFileInput={hiddenFileInput}
       handleUploadButton={handleUploadButton}
       handleDeleteClick={handleDeleteClick}
+      handleUploadClick={handleUploadClick}
+      hiddenFileInput={hiddenFileInput}
+      dragEnter={dragEnter}
       files={files}
     />
   );
